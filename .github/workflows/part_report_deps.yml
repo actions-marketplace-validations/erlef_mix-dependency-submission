@@ -28,12 +28,12 @@ jobs:
 
     steps:
       - name: Harden Runner
-        uses: step-security/harden-runner@a90bcbc6539c36a85cdfeb73f7e2f433735f215b # v2.15.0
+        uses: step-security/harden-runner@bf7454d06d71f1098171f2acdf0cd4708d7b5920 # v2.20.0
         with:
           egress-policy: audit
-      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
 
-      - uses: actions/download-artifact@70fc10c6e5e1ce46ad2ea6f2b72d43f7d47b13c3 # v8.0.0
+      - uses: actions/download-artifact@3e5f45b2cfb9172054b4087a40e8e0b5a5461e7c # v8.0.1
         with:
           name: binary
           path: .
@@ -51,14 +51,14 @@ jobs:
           GITHUB_TOKEN: ${{ github.token }}
 
       - name: "Validate Output submission-json-path not empty"
-        uses: nick-fields/assert-action@aa0067e01f0f6545c31755d6ca128c5a3a14f6bf # v2.0.0
+        uses: nick-fields/assert-action@0efd6166067d9c59d89c710fab4f79fb066f8985 # v4.0.1
         with:
           expected: ""
           actual: "${{ steps.submit.outputs.submission-json-path }}"
           comparison: "notEqual"
 
       - name: "Validate Output submission-json-path file contents valid JSON"
-        uses: actions/github-script@ed597411d8f924073f98dfc5c65a23a2325f34cd # v8.0.0
+        uses: actions/github-script@3a2844b7e9c422d3c10d287c895573f7108da1b3 # v9.0.0
         with:
           script: |
             const fs = require('fs');
@@ -75,14 +75,14 @@ jobs:
           SUBMISSION_JSON_PATH: "${{ steps.submit.outputs.submission-json-path }}"
 
       - name: "Validate output snapshot-id not empty"
-        uses: nick-fields/assert-action@aa0067e01f0f6545c31755d6ca128c5a3a14f6bf # v2.0.0
+        uses: nick-fields/assert-action@0efd6166067d9c59d89c710fab4f79fb066f8985 # v4.0.1
         with:
           expected: ""
           actual: "${{ steps.submit.outputs.snapshot-id }}"
           comparison: "notEqual"
 
       - name: "Validate output snapshot-api-url is correct"
-        uses: nick-fields/assert-action@aa0067e01f0f6545c31755d6ca128c5a3a14f6bf # v2.0.0
+        uses: nick-fields/assert-action@0efd6166067d9c59d89c710fab4f79fb066f8985 # v4.0.1
         with:
           expected: "${{ github.api_url }}/repos/${{ github.repository }}/dependency-graph/snapshots/${{ steps.submit.outputs.snapshot-id }}"
           actual: "${{ steps.submit.outputs.snapshot-api-url }}"
@@ -90,14 +90,14 @@ jobs:
 
       - name: "Can call snapshot-api-url"
         id: snapshot-api-call
-        uses: fjogeleit/http-request-action@551353b829c3646756b2ec2b3694f819d7957495 #v2.0.0
+        uses: fjogeleit/http-request-action@f98bb26551cd1af7d3eb2674578a80754ece88db #v2.0.1
         with:
           url: "${{ steps.submit.outputs.snapshot-api-url }}"
           method: "GET"
           bearerToken: "${{ github.token }}"
 
       - name: "Snapshot API call status code is 200"
-        uses: nick-fields/assert-action@aa0067e01f0f6545c31755d6ca128c5a3a14f6bf # v2.0.0
+        uses: nick-fields/assert-action@0efd6166067d9c59d89c710fab4f79fb066f8985 # v4.0.1
         with:
           expected: "200"
           actual: "${{ steps.snapshot-api-call.outputs.status }}"
