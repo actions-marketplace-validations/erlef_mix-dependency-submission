@@ -2,7 +2,7 @@
 defmodule MixDependencySubmission.MixProject do
   use Mix.Project
 
-  @version "1.3.2"
+  @version "1.3.3"
   @source_url "https://github.com/erlef/mix-dependency-submission"
   @description "Calculates dependencies for Mix and submits the list to the GitHub Dependency Submission API"
 
@@ -10,7 +10,7 @@ defmodule MixDependencySubmission.MixProject do
     [
       app: :mix_dependency_submission,
       version: @version,
-      elixir: "1.19.5",
+      elixir: "1.20.3",
       start_permanent: Mix.env() == :prod,
       deps: deps(),
       archives: archives(),
